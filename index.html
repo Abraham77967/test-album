@@ -350,25 +350,7 @@
                 pointer-events: auto;
             }
             
-            .reset-stack-btn {
-                position: absolute;
-                bottom: -45px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: #fff;
-                border: 1px solid #ddd;
-                border-radius: 20px;
-                padding: 8px 15px;
-                font-family: 'Montserrat', sans-serif;
-                cursor: pointer;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-                transition: all 0.2s ease;
-            }
-            
-            .reset-stack-btn:hover {
-                background: #f0f0f0;
-                box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-            }
+
         `;
         document.head.appendChild(style);
 
@@ -594,69 +576,32 @@
                         
                         // After animation, move the swiped card to bottom of stack
                         setTimeout(() => {
-                            const swipedFrame = frame; // Keep a reference to the frame that was swiped
+                            // Simple card recycling: grab the swiped card
+                            const swipedFrame = frame;
                             const parent = swipedFrame.parentNode;
-                            parent.appendChild(swipedFrame); // Move DOM element to the end
-                            swipedFrame.style.transition = 'none'; // Clear transition for immediate repositioning for animation setup
-
-                            refreshCardOrder(); // Update photoFrames NodeList to new DOM order
-
-                            // Iterate through the NEW order of photoFrames to update styles and z-indices
-                            photoFrames.forEach((currentFrame, currentIndex) => {
-                                currentFrame.classList.remove('card-entry'); // Clear any lingering animation class
-                                
-                                // Standard transition for adjustments, unless it's the card being animated in
-                                if (currentFrame !== swipedFrame) {
-                                    currentFrame.style.transition = 'transform 0.4s cubic-bezier(0.25,0.1,0.25,1), opacity 0.4s ease';
-                                }
-
-                                if (currentIndex === activeIndex) { // This is the NEW top card
-                                    const topRotation = (currentIndex % 2 === 0 ? -2 : 2) + ((Math.random()*1)-0.5); // Tiny jitter for top card too
-                                    currentFrame.style.transform = `translate(-50%, 0) rotate(${topRotation}deg)`;
-                                    currentFrame.style.opacity = '1';
-                                    currentFrame.style.zIndex = 5;
-                                    currentFrame.classList.remove('swiped');
-
-                                } else if (currentFrame === swipedFrame) { // This is the card just recycled to the bottom
-                                    const lastDomIndex = photoFrames.length - 1; // Its actual new DOM index
-                                    const xO = 10 * (lastDomIndex % 2 === 0 ? -1 : 1);
-                                    const yO = 15 * lastDomIndex;
-                                    const baseRot = (lastDomIndex % 2 === 0 ? -3 - lastDomIndex : 3 + lastDomIndex);
-                                    const jitter = (Math.random() * 4) - 2; // More significant jitter for recycled card
-                                    const finalRot = baseRot + jitter;
-
-                                    currentFrame.style.setProperty('--x-offset', xO + 'px');
-                                    currentFrame.style.setProperty('--y-offset', yO + 'px');
-                                    currentFrame.style.setProperty('--rotation', finalRot + 'deg');
-
-                                    // Set the card to a slightly hidden position first
-                                    currentFrame.style.opacity = '0.3'; // Start with some visibility
-                                    currentFrame.style.transform = `translate(calc(-50% + ${xO}px), calc(${yO}px + 20px)) rotate(${finalRot}deg) scale(0.95)`;
-                                    currentFrame.style.zIndex = 5 - lastDomIndex; 
-                                    currentFrame.classList.remove('swiped');
-                                    
-                                    // Force reflow to ensure animation works properly
-                                    void currentFrame.offsetWidth; 
-                                    
-                                    // Animate to final position
-                                    currentFrame.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease';
-                                    setTimeout(() => {
-                                        currentFrame.style.opacity = '0.9';
-                                        currentFrame.style.transform = `translate(calc(-50% + ${xO}px), ${yO}px) rotate(${finalRot}deg) scale(0.98)`;
-                                    }, 50);
-                                } else { // These are the OTHER cards in the stack, subtly readjust them
-                                    const xO = 10 * (currentIndex % 2 === 0 ? -1 : 1);
-                                    const yO = 15 * currentIndex;
-                                    const baseRot = (currentIndex % 2 === 0 ? -3 - currentIndex : 3 + currentIndex);
-                                    const jitter = (Math.random() * 2) - 1; // Smaller jitter for existing stack cards
-                                    const finalRot = baseRot + jitter;
-                                    
-                                    currentFrame.style.transform = `translate(calc(-50% + ${xO}px), ${yO}px) rotate(${finalRot}deg)`;
-                                    currentFrame.style.opacity = '0.9'; // Ensure consistent opacity with our initialization
-                                    currentFrame.style.zIndex = 5 - currentIndex;
-                                    currentFrame.classList.remove('swiped');
-                                }
-                            });
+                            
+                            // Move DOM element to the end
+                            parent.appendChild(swipedFrame);
+                            
+                            // Generate random orientation for the recycled card
+                            const randomRotation = (Math.random() * 10) - 5; // Random rotation between -5 and 5 degrees
+                            const xOffset = (Math.random() * 20) - 10; // Random x-offset between -10 and 10px
+                            
+                            // Position at bottom of stack with random orientation
+                            swipedFrame.style.transition = 'none';
+                            swipedFrame.style.opacity = '0';
+                            swipedFrame.style.transform = `translate(calc(-50% + ${xOffset}px), 60px) rotate(${randomRotation}deg)`;
+                            swipedFrame.style.zIndex = '1';
+                            
+                            // Force reflow
+                            void swipedFrame.offsetWidth;
+                            
+                            // Fade in with animation
+                            swipedFrame.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                            swipedFrame.style.opacity = '0.9';
+                            
+                            // Update the NodeList to reflect new DOM order
+                            photoFrames = document.querySelectorAll('.photo-frame');
                         }, 500);
                         
                     } else {
@@ -723,22 +668,7 @@
                 frame.addEventListener('touchstart', dragStart);
             });
             
-            // Reset button functionality
-            const resetBtn = document.createElement('button');
-            resetBtn.textContent = "Reset Stack";
-            resetBtn.className = "reset-stack-btn";
-            resetBtn.addEventListener('click', function() {
-                // Reset all cards
-                photoFrames.forEach(frame => {
-                    frame.classList.remove('swiped');
-                    frame.style.opacity = 1;
-                });
-                initCardStack();
-            });
-            
-            // Add reset button after swipe hint
-            const photoContainer = document.querySelector('.photo-frames');
-            photoContainer.appendChild(resetBtn);
+
             
             // Function to refresh the card order after DOM changes
             function refreshCardOrder() {
