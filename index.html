@@ -123,13 +123,20 @@
                     <h2 class="pricing-title">Pricing</h2>
                     <div class="pricing-chart visible">
                         <div class="pricing-option">
-                            <div class="price-title">Standard Session</div>
+                            <div class="price-title">
+                                <i class="fas fa-camera"></i> Standard Session
+                            </div>
                             <div class="price-amount">$10</div>
-                            <div class="price-details">15 minute session</div>
+                            <div class="price-details">
+                                15 minute session
+                                <div class="price-note">Photos will be uploaded to this website for viewing</div>
+                            </div>
                         </div>
                         <div class="pricing-divider"></div>
                         <div class="pricing-option">
-                            <div class="price-title">Polaroids</div>
+                            <div class="price-title">
+                                <i class="fas fa-image"></i> Polaroids
+                            </div>
                             <div class="price-amount">$3 each</div>
                             <div class="price-details">
                                 <span class="special-offer">Special Deal: $5 for two!</span>
@@ -491,6 +498,19 @@
             .close-modal:hover {
                 background: rgba(255,255,255,0.2);
                 transform: scale(1.1);
+            }
+            
+            /* Pricing styles */
+            .price-note {
+                font-size: 0.8rem;
+                margin-top: 5px;
+                color: #7d7d7d;
+                font-style: italic;
+            }
+            
+            .price-title i {
+                margin-right: 8px;
+                color: #5e6cd1;
             }
         `;
         document.head.appendChild(modalStyle);
