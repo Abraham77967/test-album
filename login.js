@@ -174,4 +174,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Pricing button smooth scroll functionality
+    const pricingBtn = document.getElementById('pricing-btn');
+    const pricingSection = document.getElementById('pricing-section');
+    
+    if (pricingBtn && pricingSection) {
+        pricingBtn.addEventListener('click', function() {
+            // Scroll to pricing section smoothly
+            pricingSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+            
+            // Add a highlight effect to the pricing section
+            pricingSection.classList.add('highlight');
+            setTimeout(() => {
+                pricingSection.classList.remove('highlight');
+            }, 1500);
+        });
+    }
 }); 
