@@ -14,6 +14,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Damion&family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
 <body>
     <div class="animated-bg">
@@ -700,6 +705,36 @@
             
             // Initialize
             initCardStack();
+        });
+
+        // Add smooth scrolling for pricing button
+        document.addEventListener('DOMContentLoaded', function() {
+            const pricingBtn = document.getElementById('pricing-btn');
+            if (pricingBtn) {
+                pricingBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pricingSection = document.getElementById('pricing-section');
+                    if (pricingSection) {
+                        pricingSection.scrollIntoView({ 
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            }
+            
+            // Also add smooth scrolling for the circular pricing button
+            const pricingCircleBtn = document.getElementById('pricing-circle-btn');
+            if (pricingCircleBtn) {
+                pricingCircleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pricingSection = document.getElementById('pricing-section');
+                    if (pricingSection) {
+                        pricingSection.scrollIntoView({ 
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            }
         });
     </script>
 </body>
