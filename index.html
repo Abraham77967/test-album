@@ -27,41 +27,49 @@
         <div class="stars"></div>
     </div>
     
-    <div class="login-container">
-        <div class="login-box high-readability">
-            <div class="login-decoration top-left"></div>
-            <div class="login-decoration top-right"></div>
-            <div class="login-decoration bottom-left"></div>
-            <div class="login-decoration bottom-right"></div>
-            
-            <h1>Photo Albums</h1>
-            <p class="subtitle">Enter your access code</p>
-            
-            <form id="login-form">
-                <div class="input-group">
-                    <input type="text" id="access-code" placeholder="Access Code" required autocomplete="off">
-                    <div class="input-focus-effect"></div>
+    <div class="page-content">
+        <div class="login-container">
+            <div class="login-box high-readability">
+                <div class="login-decoration top-left"></div>
+                <div class="login-decoration top-right"></div>
+                <div class="login-decoration bottom-left"></div>
+                <div class="login-decoration bottom-right"></div>
+                
+                <h1>Photo Albums</h1>
+                <p class="subtitle">Enter your access code</p>
+                
+                <form id="login-form">
+                    <div class="input-group">
+                        <input type="text" id="access-code" placeholder="Access Code" required autocomplete="off">
+                        <div class="input-focus-effect"></div>
+                    </div>
+                    <div id="error-message" class="error-message"></div>
+                    <button type="submit" class="login-btn">
+                        <span>View Photos</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+                
+                <div class="photoshoot-request">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdet8pbpDAvvdQICvYkNhF6L_J2vAl7IYHWx8DnU_GKSipHjA/viewform?usp=header" target="_blank" class="photoshoot-btn">
+                        <i class="fas fa-camera"></i> <span>Book a Photoshoot</span>
+                    </a>
                 </div>
-                <div id="error-message" class="error-message"></div>
-                <button type="submit" class="login-btn">
-                    <span>View Photos</span>
-                    <i class="fas fa-arrow-right"></i>
-                </button>
-            </form>
-            
-            <div class="photoshoot-request">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdet8pbpDAvvdQICvYkNhF6L_J2vAl7IYHWx8DnU_GKSipHjA/viewform?usp=header" target="_blank" class="photoshoot-btn">
-                    <i class="fas fa-camera"></i> <span>Book a Photoshoot</span>
-                </a>
+                
+                <div class="pricing-button">
+                    <button id="pricing-btn" class="pricing-btn">
+                        <i class="fas fa-tags"></i> <span>View Pricing</span>
+                    </button>
+                </div>
+                
+                <div class="login-footer">
+                    <p></p>
+                </div>
             </div>
-            
-            <div class="pricing-button">
-                <button id="pricing-btn" class="pricing-btn">
-                    <i class="fas fa-tags"></i> <span>View Pricing</span>
-                </button>
-            </div>
-            
-            <div id="pricing-section" class="pricing-section">
+        </div>
+        
+        <div id="pricing-section" class="pricing-section">
+            <div class="pricing-container">
                 <h2 class="pricing-title">Our Pricing</h2>
                 <div class="pricing-chart visible">
                     <div class="pricing-option">
@@ -78,10 +86,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="login-footer">
-                <p></p>
             </div>
         </div>
     </div>

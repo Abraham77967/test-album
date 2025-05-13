@@ -182,16 +182,35 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pricingBtn && pricingSection) {
         pricingBtn.addEventListener('click', function() {
             // Scroll to pricing section smoothly
-            pricingSection.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
+            window.scrollTo({
+                top: pricingSection.offsetTop - 20,
+                behavior: 'smooth'
             });
             
-            // Add a highlight effect to the pricing section
-            pricingSection.classList.add('highlight');
+            // Add a highlight effect to the pricing section after scrolling
             setTimeout(() => {
-                pricingSection.classList.remove('highlight');
-            }, 1500);
+                pricingSection.classList.add('highlight');
+                setTimeout(() => {
+                    pricingSection.classList.remove('highlight');
+                }, 1500);
+            }, 700); // Wait for scroll to complete
         });
     }
+
+    // Add parallax effect to pricing section
+    window.addEventListener('scroll', function() {
+        const scrollPosition = window.scrollY;
+        
+        // Apply subtle parallax effect to pricing section
+        if (pricingSection) {
+            const distance = pricingSection.getBoundingClientRect().top;
+            const speed = 0.3;
+            
+            // Only apply effect when pricing section is coming into view
+            if (distance < window.innerHeight && distance > -pricingSection.offsetHeight) {
+                // Create parallax effect
+                pricingSection.style.backgroundPosition = `center ${scrollPosition * speed}px`;
+            }
+        }
+    });
 }); 
