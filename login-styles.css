@@ -1,18 +1,32 @@
 /* Elegant Login Page Styles */
 
+/* Add global smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Add global scrolling fix */
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+}
+
 /* Base styles for login page */
 .login-page {
     background: linear-gradient(135deg, #f5f7fa 0%, #e4ecfb 100%);
     min-height: 100vh;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
     font-family: 'Montserrat', sans-serif;
     padding: 0;
     margin: 0;
-    overflow-x: hidden;
 }
 
 .page-content {
@@ -20,9 +34,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 0 80px;
+    padding: 40px 0 0;
+    min-height: 100vh;
     position: relative;
-    z-index: 10;
+    z-index: 2;
 }
 
 /* Animated background with light orbs */
@@ -583,6 +598,12 @@
     margin-bottom: 15px;
 }
 
+/* Adjust pricing section for anchor offset */
+#pricing-section {
+    scroll-margin-top: 50px; /* Give space when scrolling to this section */
+}
+
+/* Pricing button as anchor */
 .pricing-btn {
     display: inline-flex;
     align-items: center;
@@ -600,6 +621,7 @@
     overflow: hidden;
     box-shadow: 0 2px 6px rgba(64, 115, 255, 0.2);
     border: none;
+    text-decoration: none;
 }
 
 .pricing-btn i {
@@ -612,6 +634,8 @@
     background-color: rgba(64, 115, 255, 0.4);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(64, 115, 255, 0.3);
+    text-decoration: none;
+    color: #194185;
 }
 
 .pricing-btn:hover i {
@@ -625,45 +649,79 @@
 /* Updated Pricing Section */
 .pricing-section {
     width: 100%;
-    min-height: 350px;
-    margin-top: 100px;
+    min-height: 400px;
+    margin-top: 80px;
+    margin-bottom: 50px;
     text-align: center;
     scroll-margin-top: 30px;
     position: relative;
-    padding: 60px 0;
+    padding: 60px 0 120px;
     background: linear-gradient(to bottom, rgba(255,255,255,0.6), rgba(240,245,255,0.9));
     box-shadow: 0 -10px 30px rgba(120, 134, 199, 0.1);
     border-top: 1px solid rgba(255,255,255,0.8);
+    z-index: 5;
 }
 
-.pricing-section::before {
-    content: '';
+/* Remove pseudo elements that might interfere */
+.pricing-section::before,
+.pricing-section::after {
+    content: none !important;
+}
+
+/* Make the actual button clearly clickable - now an anchor */
+.pricing-circle-btn {
     position: absolute;
     top: -30px;
     left: 50%;
     transform: translateX(-50%);
     width: 60px;
     height: 60px;
-    background: rgba(255,255,255,0.9);
     border-radius: 50%;
-    box-shadow: 0 -5px 15px rgba(120, 134, 199, 0.1);
+    z-index: 200; /* Very high z-index */
+    cursor: pointer;
+    background-color: #7886C7; /* Distinct color */
+    border: 2px solid white;
+    outline: none;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 5;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.pricing-section::after {
-    content: '\f0d8';
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
-    position: absolute;
-    top: -22px;
-    left: 50%;
-    transform: translateX(-50%);
+.pricing-circle-btn i {
     font-size: 24px;
-    color: #7886C7;
-    z-index: 6;
+    color: white; /* White icon for better contrast */
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.pricing-circle-btn:hover {
+    transform: translateX(-50%) translateY(-5px);
+    background-color: #5b69b4;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.pricing-circle-btn:hover i {
+    transform: scale(1.2);
+}
+
+.pricing-circle-btn:active {
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Highlight animation for pricing chart */
+@keyframes highlight-effect {
+    0% { transform: translateY(0); box-shadow: 0 15px 35px rgba(120, 134, 199, 0.15); }
+    50% { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(64, 115, 255, 0.3); }
+    100% { transform: translateY(0); box-shadow: 0 15px 35px rgba(120, 134, 199, 0.15); }
+}
+
+.pricing-chart.highlight {
+    animation: highlight-effect 1.5s ease-in-out;
 }
 
 .pricing-container {

@@ -136,79 +136,56 @@ document.addEventListener('DOMContentLoaded', () => {
     
     createRandomMovement();
 
-    // Pricing toggle functionality
-    const pricingToggle = document.querySelector('.pricing-toggle');
-    const pricingChart = document.querySelector('.pricing-chart');
-    const pricingHint = document.querySelector('.pricing-hint');
-    
-    if (pricingToggle && pricingChart) {
-        // Set initial toggle text
-        const toggleText = pricingToggle.querySelector('span');
-        if (toggleText) {
-            toggleText.textContent = 'View Pricing';
-        }
-
-        // Add delay before starting animations
-        setTimeout(() => {
-            pricingToggle.classList.add('animate');
-        }, 2500);
-
-        pricingToggle.addEventListener('click', function() {
-            pricingToggle.classList.toggle('active');
-            pricingChart.classList.toggle('show');
-
-            // Remove animation class when active
-            if (pricingToggle.classList.contains('active')) {
-                pricingToggle.classList.remove('animate');
-                if (pricingHint) pricingHint.style.display = 'none';
-            } else {
-                pricingToggle.classList.add('animate');
-                if (pricingHint) pricingHint.style.display = '';
-            }
-
-            // Update text based on state
-            if (pricingChart.classList.contains('show')) {
-                toggleText.textContent = 'Hide Pricing';
-            } else {
-                toggleText.textContent = 'View Pricing';
-            }
-        });
-    }
-
-    // Pricing button smooth scroll functionality
+    // Enhanced smooth scrolling for pricing section
     const pricingBtn = document.getElementById('pricing-btn');
+    const pricingCircleBtn = document.getElementById('pricing-circle-btn');
     const pricingSection = document.getElementById('pricing-section');
+    const pricingChart = document.querySelector('.pricing-chart');
     
-    if (pricingBtn && pricingSection) {
-        pricingBtn.addEventListener('click', function() {
-            // Scroll to pricing section smoothly
-            window.scrollTo({
-                top: pricingSection.offsetTop - 20,
-                behavior: 'smooth'
-            });
-            
-            // Add a highlight effect to the pricing section after scrolling
-            setTimeout(() => {
-                pricingSection.classList.add('highlight');
-                setTimeout(() => {
-                    pricingSection.classList.remove('highlight');
-                }, 1500);
-            }, 700); // Wait for scroll to complete
+    // Function to smoothly scroll to pricing section
+    function smoothScrollToPricing(e) {
+        e.preventDefault(); // Prevent default anchor behavior
+        
+        const targetSection = document.getElementById('pricing-section');
+        if (!targetSection) return;
+        
+        // Get position of the target element
+        const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = targetPosition - 50; // 50px offset from top
+        
+        // Smooth scroll to target
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
         });
+        
+        // Add highlight effect after scroll
+        if (pricingChart) {
+            setTimeout(() => {
+                pricingChart.classList.add('highlight');
+                setTimeout(() => {
+                    pricingChart.classList.remove('highlight');
+                }, 1500);
+            }, 700);
+        }
+    }
+    
+    // Add click handlers to both buttons
+    if (pricingBtn) {
+        pricingBtn.addEventListener('click', smoothScrollToPricing);
+    }
+    
+    if (pricingCircleBtn) {
+        pricingCircleBtn.addEventListener('click', smoothScrollToPricing);
     }
 
-    // Add parallax effect to pricing section
+    // Simple parallax effect for pricing section
     window.addEventListener('scroll', function() {
-        const scrollPosition = window.scrollY;
-        
-        // Apply subtle parallax effect to pricing section
         if (pricingSection) {
-            const distance = pricingSection.getBoundingClientRect().top;
-            const speed = 0.3;
-            
-            // Only apply effect when pricing section is coming into view
-            if (distance < window.innerHeight && distance > -pricingSection.offsetHeight) {
-                // Create parallax effect
+            const rect = pricingSection.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom >= 0) {
+                const scrollPosition = window.scrollY;
+                const speed = 0.05;
                 pricingSection.style.backgroundPosition = `center ${scrollPosition * speed}px`;
             }
         }
