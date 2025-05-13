@@ -69,12 +69,58 @@
                 </div>
             </div>
             
+            <div class="photos-on-string-container">
+                <h2 class="portfolio-title">My Photography Work</h2>
+                <p class="portfolio-subtitle">Click on any photo to view full size</p>
+                <div class="string-display">
+                    <div class="string-line"></div>
+                    <div class="photo-frames">
+                        <div class="photo-frame">
+                            <div class="clothespin"></div>
+                            <div class="photo-polaroid">
+                                <img src="photos/DSC06217.webp" alt="Portrait Shot">
+                                <div class="photo-caption">Portrait Shot</div>
+                            </div>
+                        </div>
+                        <div class="photo-frame">
+                            <div class="clothespin"></div>
+                            <div class="photo-polaroid">
+                                <img src="photos/DSC06268.webp" alt="Natural Light">
+                                <div class="photo-caption">Natural Light</div>
+                            </div>
+                        </div>
+                        <div class="photo-frame">
+                            <div class="clothespin"></div>
+                            <div class="photo-polaroid">
+                                <img src="photos/DSC06231.webp" alt="Evening Glow">
+                                <div class="photo-caption">Evening Glow</div>
+                            </div>
+                        </div>
+                        <div class="photo-frame">
+                            <div class="clothespin"></div>
+                            <div class="photo-polaroid">
+                                <img src="photos/P1005465.webp" alt="Candid Moment">
+                                <div class="photo-caption">Candid Moment</div>
+                            </div>
+                        </div>
+                        <div class="photo-frame">
+                            <div class="clothespin"></div>
+                            <div class="photo-polaroid">
+                                <img src="photos/DSC06154.webp" alt="Urban Style">
+                                <div class="photo-caption">Urban Style</div>
+                            </div>
+                        </div>
+                        <div class="swipe-hint">Swipe cards to cycle through photos</div>
+                    </div>
+                </div>
+            </div>
+            
             <div id="pricing-section" class="pricing-section">
                 <a href="#pricing-section" id="pricing-circle-btn" class="pricing-circle-btn">
                     <i class="fas fa-chevron-up"></i>
                 </a>
                 <div class="pricing-container">
-                    <h2 class="pricing-title">Our Pricing</h2>
+                    <h2 class="pricing-title">Pricing</h2>
                     <div class="pricing-chart visible">
                         <div class="pricing-option">
                             <div class="price-title">Standard Session</div>
@@ -96,5 +142,616 @@
     </div>
 
     <script src="login.js"></script>
+    <script>
+        // Use actual photographs for the string display with titles
+        const samplePhotos = [
+            { src: 'photos/DSC06217.webp', title: 'Portrait Shot' },
+            { src: 'photos/DSC06268.webp', title: 'Natural Light' },
+            { src: 'photos/DSC06231.webp', title: 'Evening Glow' },
+            { src: 'photos/P1005465.webp', title: 'Candid Moment' },
+            { src: 'photos/DSC06154.webp', title: 'Urban Style' }
+        ];
+
+        // Populate the photos on string display
+        function populatePhotosOnString() {
+            const photoSlots = document.querySelectorAll('.photo-slot');
+            
+            // Clear existing photos
+            photoSlots.forEach(slot => {
+                slot.innerHTML = '';
+            });
+            
+            // Get appropriate photo sizes based on screen size
+            let photoWidth, photoHeight;
+            if (window.innerWidth <= 480) {
+                photoWidth = 80;
+                photoHeight = 110;
+            } else if (window.innerWidth <= 768) {
+                photoWidth = 120;
+                photoHeight = 160;
+            } else {
+                photoWidth = 180;
+                photoHeight = 220;
+            }
+            
+            // Add photos to slots
+            samplePhotos.forEach((photo, index) => {
+                if (index < photoSlots.length) {
+                    // Create photo element
+                    const photoElement = document.createElement('div');
+                    photoElement.className = 'string-photo';
+                    
+                    // Add random rotation for natural look (-5 to 5 degrees)
+                    const rotation = Math.random() * 10 - 5;
+                    photoElement.style.transform = `rotate(${rotation}deg)`;
+                    
+                    // Create and add image with appropriate size
+                    const img = document.createElement('img');
+                    img.src = photo.src;
+                    img.alt = photo.title;
+                    img.style.width = `${photoWidth}px`;
+                    img.style.height = `${photoHeight}px`;
+                    img.loading = 'lazy';
+                    photoElement.appendChild(img);
+                    
+                    // Add caption
+                    const caption = document.createElement('div');
+                    caption.className = 'photo-caption';
+                    caption.textContent = photo.title;
+                    photoElement.appendChild(caption);
+                    
+                    // Add click event to view larger image
+                    photoElement.addEventListener('click', function() {
+                        const modal = document.createElement('div');
+                        modal.className = 'photo-modal';
+                        
+                        const modalContent = document.createElement('div');
+                        modalContent.className = 'modal-content';
+                        
+                        const largeImg = document.createElement('img');
+                        largeImg.src = photo.src;
+                        largeImg.alt = photo.title;
+                        
+                        const photoTitle = document.createElement('div');
+                        photoTitle.className = 'modal-photo-title';
+                        photoTitle.textContent = photo.title;
+                        
+                        const closeBtn = document.createElement('span');
+                        closeBtn.className = 'close-modal';
+                        closeBtn.innerHTML = '&times;';
+                        closeBtn.onclick = function() {
+                            modal.remove();
+                        };
+                        
+                        modalContent.appendChild(closeBtn);
+                        modalContent.appendChild(largeImg);
+                        modalContent.appendChild(photoTitle);
+                        modal.appendChild(modalContent);
+                        document.body.appendChild(modal);
+                        
+                        // Close modal when clicking outside the image
+                        modal.onclick = function(e) {
+                            if (e.target === modal) {
+                                modal.remove();
+                            }
+                        };
+                    });
+                    
+                    // Add to the slot
+                    photoSlots[index].appendChild(photoElement);
+                }
+            });
+        }
+
+        // Add animation styles for photos
+        const style = document.createElement('style');
+        style.textContent = `
+            .photo-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.8);
+                z-index: 9999;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                backdrop-filter: blur(5px);
+            }
+            
+            .modal-content {
+                position: relative;
+                max-width: 80%;
+                max-height: 80%;
+                text-align: center;
+            }
+            
+            .modal-content img {
+                max-width: 100%;
+                max-height: 80vh;
+                object-fit: contain;
+                border: 15px solid white;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
+            
+            .modal-photo-title {
+                background-color: white;
+                padding: 10px 15px;
+                font-family: 'Montserrat', sans-serif;
+                font-size: 1.2rem;
+                margin-top: -5px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
+            
+            .photo-caption {
+                background: white;
+                padding: 8px 0;
+                font-family: 'Montserrat', sans-serif;
+                font-size: 0.8rem;
+                color: #444;
+                width: 100%;
+                text-align: center;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                transform: translateY(0);
+                transition: transform 0.3s ease;
+            }
+            
+            .string-photo:hover .photo-caption {
+                transform: translateY(0);
+            }
+            
+            .close-modal {
+                position: absolute;
+                top: -20px;
+                right: -20px;
+                font-size: 30px;
+                color: white;
+                cursor: pointer;
+                background: rgba(0,0,0,0.5);
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            @keyframes photoSwing {
+                0% { transform: rotate(${Math.random() * 10 - 5}deg); }
+                50% { transform: rotate(${Math.random() * 10 - 5}deg); }
+                100% { transform: rotate(${Math.random() * 10 - 5}deg); }
+            }
+            
+            .string-photo {
+                animation: photoSwing 5s ease-in-out infinite;
+                animation-play-state: paused;
+            }
+            
+            .string-photo:hover {
+                animation-play-state: running;
+            }
+            
+            /* Card stack animation classes */
+            .card-entry {
+                opacity: 0.9 !important;
+                transform: translate(calc(-50% + var(--x-offset, 0px)), var(--y-offset, 0px)) rotate(var(--rotation, 0deg)) scale(0.98) !important;
+                transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease !important;
+            }
+            
+            .photo-frame {
+                position: absolute;
+                left: 50%;
+                top: 0;
+                transform-origin: center top;
+                cursor: grab;
+                pointer-events: auto;
+            }
+            
+            .reset-stack-btn {
+                position: absolute;
+                bottom: -45px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #fff;
+                border: 1px solid #ddd;
+                border-radius: 20px;
+                padding: 8px 15px;
+                font-family: 'Montserrat', sans-serif;
+                cursor: pointer;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                transition: all 0.2s ease;
+            }
+            
+            .reset-stack-btn:hover {
+                background: #f0f0f0;
+                box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize when the window loads
+        window.addEventListener('load', populatePhotosOnString);
+        
+        // Add debounced resize handler to prevent excessive recalculation
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                populatePhotosOnString();
+            }, 250);
+        });
+
+        // Add click event to each photo for modal view
+        document.addEventListener('DOMContentLoaded', function() {
+            const photos = document.querySelectorAll('.photo-polaroid');
+            
+            photos.forEach(photo => {
+                photo.addEventListener('click', function() {
+                    const imgSrc = this.querySelector('img').src;
+                    const imgAlt = this.querySelector('img').alt;
+                    
+                    // Create modal
+                    const modal = document.createElement('div');
+                    modal.className = 'photo-modal';
+                    
+                    // Create modal content
+                    const modalContent = document.createElement('div');
+                    modalContent.className = 'modal-content';
+                    
+                    // Create large image
+                    const largeImg = document.createElement('img');
+                    largeImg.src = imgSrc;
+                    largeImg.alt = imgAlt;
+                    
+                    // Create title
+                    const photoTitle = document.createElement('div');
+                    photoTitle.className = 'modal-photo-title';
+                    photoTitle.textContent = imgAlt;
+                    
+                    // Create close button
+                    const closeBtn = document.createElement('span');
+                    closeBtn.className = 'close-modal';
+                    closeBtn.innerHTML = '&times;';
+                    closeBtn.onclick = function() {
+                        modal.remove();
+                    };
+                    
+                    // Assemble modal
+                    modalContent.appendChild(closeBtn);
+                    modalContent.appendChild(largeImg);
+                    modalContent.appendChild(photoTitle);
+                    modal.appendChild(modalContent);
+                    document.body.appendChild(modal);
+                    
+                    // Close modal when clicking outside the image
+                    modal.onclick = function(e) {
+                        if (e.target === modal) {
+                            modal.remove();
+                        }
+                    };
+                });
+            });
+        });
+        
+        // Add styles for photo modal
+        const modalStyle = document.createElement('style');
+        modalStyle.textContent = `
+            .photo-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.85);
+                z-index: 9999;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                backdrop-filter: blur(8px);
+                animation: fadeIn 0.3s ease;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            
+            .modal-content {
+                position: relative;
+                max-width: 85%;
+                max-height: 85%;
+                text-align: center;
+                animation: zoomIn 0.3s ease;
+            }
+            
+            @keyframes zoomIn {
+                from { transform: scale(0.9); opacity: 0; }
+                to { transform: scale(1); opacity: 1; }
+            }
+            
+            .modal-content img {
+                max-width: 100%;
+                max-height: 80vh;
+                object-fit: contain;
+                border: 15px solid white;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
+            
+            .modal-photo-title {
+                background-color: white;
+                padding: 10px 15px;
+                font-family: 'Montserrat', sans-serif;
+                font-size: 1.2rem;
+                margin-top: -5px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
+            
+            .close-modal {
+                position: absolute;
+                top: -20px;
+                right: -20px;
+                font-size: 30px;
+                color: white;
+                cursor: pointer;
+                background: rgba(0,0,0,0.5);
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: all 0.2s ease;
+            }
+            
+            .close-modal:hover {
+                background: rgba(255,255,255,0.2);
+                transform: scale(1.1);
+            }
+        `;
+        document.head.appendChild(modalStyle);
+
+        // Card swiping functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const photoFrames = document.querySelectorAll('.photo-frame');
+            let activeIndex = 0;
+            
+            // Initialize card stack with smoother animations
+            function initCardStack() {
+                photoFrames.forEach((frame, index) => {
+                    // Remove any existing animation classes
+                    frame.classList.remove('card-entry');
+                    frame.style.transition = ''; // Reset transitions
+                    
+                    if (index === 0) {
+                        // Top card
+                        frame.style.zIndex = 5;
+                        frame.classList.remove('swiped');
+                        frame.style.transform = "translate(-50%, 0) rotate(-2deg)";
+                        frame.style.opacity = "1";
+                    } else {
+                        // Stacked cards
+                        frame.style.zIndex = 5 - index;
+                        const xOffset = 10 * (index % 2 === 0 ? -1 : 1);
+                        const yOffset = 15 * index;
+                        const rotation = index % 2 === 0 ? -3 - index : 3 + index;
+                        
+                        frame.style.setProperty('--x-offset', xOffset + 'px');
+                        frame.style.setProperty('--y-offset', yOffset + 'px');
+                        frame.style.setProperty('--rotation', rotation + 'deg');
+                        
+                        // Make stacked cards immediately visible with initial position
+                        frame.style.opacity = "0.9";
+                        frame.style.transform = `translate(calc(-50% + ${xOffset}px), ${yOffset}px) rotate(${rotation}deg) scale(0.98)`;
+                        
+                        // Add card-entry class after a brief delay for staggered animation
+                        setTimeout(() => {
+                            frame.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease';
+                        }, 50 * index); // Slightly faster stagger
+                    }
+                });
+                activeIndex = 0;
+            }
+
+            // Handle card swipe/drag with smoother animations
+            photoFrames.forEach((frame, index) => {
+                let startX, startY;
+                let moveX = 0, moveY = 0;
+
+                // Drag end handler with improved animations
+                function dragEnd(e) {
+                    // Remove event listeners
+                    document.removeEventListener('touchmove', drag);
+                    document.removeEventListener('touchend', dragEnd);
+                    document.removeEventListener('mousemove', drag);
+                    document.removeEventListener('mouseup', dragEnd);
+                    
+                    const frame = photoFrames[activeIndex];
+                    const distance = Math.sqrt(moveX * moveX + moveY * moveY);
+                    
+                    if (distance > 150) {
+                        // Animate card flying away with a smooth transition
+                        frame.style.transition = `transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1)`;
+                        frame.style.transform = `translate(calc(-50% + ${moveX * 2}px), ${moveY * 2}px) rotate(${moveX * 0.1}deg)`;
+                        frame.style.opacity = 0;
+                        frame.style.zIndex = 0;
+                        
+                        // Move to next card, allowing wrap-around to first card
+                        activeIndex = (activeIndex + 1) % photoFrames.length;
+                        
+                        // Show next card as top card with a subtle reveal animation
+                        const nextFrame = photoFrames[activeIndex];
+                        nextFrame.style.zIndex = 5;
+                        // Keep the tilt of the new top card
+                        const rotation = activeIndex % 2 === 0 ? -2 : 2;
+                        
+                        // Apply a subtle reveal animation
+                        nextFrame.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                        nextFrame.style.transform = `translate(-50%, 0) rotate(${rotation}deg)`;
+                        nextFrame.style.opacity = 1;
+                        
+                        // After animation, move the swiped card to bottom of stack
+                        setTimeout(() => {
+                            const swipedFrame = frame; // Keep a reference to the frame that was swiped
+                            const parent = swipedFrame.parentNode;
+                            parent.appendChild(swipedFrame); // Move DOM element to the end
+                            swipedFrame.style.transition = 'none'; // Clear transition for immediate repositioning for animation setup
+
+                            refreshCardOrder(); // Update photoFrames NodeList to new DOM order
+
+                            // Iterate through the NEW order of photoFrames to update styles and z-indices
+                            photoFrames.forEach((currentFrame, currentIndex) => {
+                                currentFrame.classList.remove('card-entry'); // Clear any lingering animation class
+                                
+                                // Standard transition for adjustments, unless it's the card being animated in
+                                if (currentFrame !== swipedFrame) {
+                                    currentFrame.style.transition = 'transform 0.4s cubic-bezier(0.25,0.1,0.25,1), opacity 0.4s ease';
+                                }
+
+                                if (currentIndex === activeIndex) { // This is the NEW top card
+                                    const topRotation = (currentIndex % 2 === 0 ? -2 : 2) + ((Math.random()*1)-0.5); // Tiny jitter for top card too
+                                    currentFrame.style.transform = `translate(-50%, 0) rotate(${topRotation}deg)`;
+                                    currentFrame.style.opacity = '1';
+                                    currentFrame.style.zIndex = 5;
+                                    currentFrame.classList.remove('swiped');
+
+                                } else if (currentFrame === swipedFrame) { // This is the card just recycled to the bottom
+                                    const lastDomIndex = photoFrames.length - 1; // Its actual new DOM index
+                                    const xO = 10 * (lastDomIndex % 2 === 0 ? -1 : 1);
+                                    const yO = 15 * lastDomIndex;
+                                    const baseRot = (lastDomIndex % 2 === 0 ? -3 - lastDomIndex : 3 + lastDomIndex);
+                                    const jitter = (Math.random() * 4) - 2; // More significant jitter for recycled card
+                                    const finalRot = baseRot + jitter;
+
+                                    currentFrame.style.setProperty('--x-offset', xO + 'px');
+                                    currentFrame.style.setProperty('--y-offset', yO + 'px');
+                                    currentFrame.style.setProperty('--rotation', finalRot + 'deg');
+
+                                    // Set the card to a slightly hidden position first
+                                    currentFrame.style.opacity = '0.3'; // Start with some visibility
+                                    currentFrame.style.transform = `translate(calc(-50% + ${xO}px), calc(${yO}px + 20px)) rotate(${finalRot}deg) scale(0.95)`;
+                                    currentFrame.style.zIndex = 5 - lastDomIndex; 
+                                    currentFrame.classList.remove('swiped');
+                                    
+                                    // Force reflow to ensure animation works properly
+                                    void currentFrame.offsetWidth; 
+                                    
+                                    // Animate to final position
+                                    currentFrame.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease';
+                                    setTimeout(() => {
+                                        currentFrame.style.opacity = '0.9';
+                                        currentFrame.style.transform = `translate(calc(-50% + ${xO}px), ${yO}px) rotate(${finalRot}deg) scale(0.98)`;
+                                    }, 50);
+                                } else { // These are the OTHER cards in the stack, subtly readjust them
+                                    const xO = 10 * (currentIndex % 2 === 0 ? -1 : 1);
+                                    const yO = 15 * currentIndex;
+                                    const baseRot = (currentIndex % 2 === 0 ? -3 - currentIndex : 3 + currentIndex);
+                                    const jitter = (Math.random() * 2) - 1; // Smaller jitter for existing stack cards
+                                    const finalRot = baseRot + jitter;
+                                    
+                                    currentFrame.style.transform = `translate(calc(-50% + ${xO}px), ${yO}px) rotate(${finalRot}deg)`;
+                                    currentFrame.style.opacity = '0.9'; // Ensure consistent opacity with our initialization
+                                    currentFrame.style.zIndex = 5 - currentIndex;
+                                    currentFrame.classList.remove('swiped');
+                                }
+                            });
+                        }, 500);
+                        
+                    } else {
+                        // Reset card position with original tilt
+                        frame.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.3s ease';
+                        const rotation = activeIndex % 2 === 0 ? -2 : 2;
+                        frame.style.transform = `translate(-50%, 0) rotate(${rotation}deg)`;
+                        frame.style.opacity = 1;
+                    }
+                    
+                    // Reset movement values
+                    moveX = 0;
+                    moveY = 0;
+                }
+                
+                // Touch/Mouse down
+                function dragStart(e) {
+                    if (index !== activeIndex) return;
+                    
+                    e.preventDefault();
+                    
+                    // Get starting position
+                    startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+                    startY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+                    
+                    // Add events for dragging
+                    if (e.type === 'touchstart') {
+                        document.addEventListener('touchmove', drag);
+                        document.addEventListener('touchend', dragEnd);
+                    } else {
+                        document.addEventListener('mousemove', drag);
+                        document.addEventListener('mouseup', dragEnd);
+                    }
+                }
+                
+                // Drag/move handler
+                function drag(e) {
+                    e.preventDefault();
+                    
+                    // Calculate movement
+                    const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+                    
+                    moveX = clientX - startX;
+                    moveY = clientY - startY;
+                    
+                    // Move card with pointer
+                    const frame = photoFrames[activeIndex];
+                    frame.style.transform = `translate(calc(-50% + ${moveX}px), ${moveY}px)`;
+                    
+                    // Add rotation based on horizontal movement
+                    const rotate = moveX * 0.1;
+                    frame.style.transform += ` rotate(${rotate}deg)`;
+                    
+                    // Adjust opacity based on distance moved
+                    const distance = Math.sqrt(moveX * moveX + moveY * moveY);
+                    if (distance > 100) {
+                        frame.style.opacity = 1 - ((distance - 100) / 200);
+                    }
+                }
+                
+                // Add event listeners
+                frame.addEventListener('mousedown', dragStart);
+                frame.addEventListener('touchstart', dragStart);
+            });
+            
+            // Reset button functionality
+            const resetBtn = document.createElement('button');
+            resetBtn.textContent = "Reset Stack";
+            resetBtn.className = "reset-stack-btn";
+            resetBtn.addEventListener('click', function() {
+                // Reset all cards
+                photoFrames.forEach(frame => {
+                    frame.classList.remove('swiped');
+                    frame.style.opacity = 1;
+                });
+                initCardStack();
+            });
+            
+            // Add reset button after swipe hint
+            const photoContainer = document.querySelector('.photo-frames');
+            photoContainer.appendChild(resetBtn);
+            
+            // Function to refresh the card order after DOM changes
+            function refreshCardOrder() {
+                // Get updated order of cards
+                const updatedFrames = document.querySelectorAll('.photo-frame');
+                
+                // Update our reference array with the new order
+                photoFrames = updatedFrames;
+            }
+            
+            // Initialize
+            initCardStack();
+        });
+    </script>
 </body>
 </html> 

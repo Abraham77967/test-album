@@ -136,50 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     createRandomMovement();
 
-    // Enhanced smooth scrolling for pricing section
-    const pricingBtn = document.getElementById('pricing-btn');
-    const pricingCircleBtn = document.getElementById('pricing-circle-btn');
-    const pricingSection = document.getElementById('pricing-section');
-    const pricingChart = document.querySelector('.pricing-chart');
-    
-    // Function to smoothly scroll to pricing section
-    function smoothScrollToPricing(e) {
-        e.preventDefault(); // Prevent default anchor behavior
-        
-        const targetSection = document.getElementById('pricing-section');
-        if (!targetSection) return;
-        
-        // Get position of the target element
-        const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = targetPosition - 50; // 50px offset from top
-        
-        // Smooth scroll to target
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-        });
-        
-        // Add highlight effect after scroll
-        if (pricingChart) {
-            setTimeout(() => {
-                pricingChart.classList.add('highlight');
-                setTimeout(() => {
-                    pricingChart.classList.remove('highlight');
-                }, 1500);
-            }, 700);
-        }
-    }
-    
-    // Add click handlers to both buttons
-    if (pricingBtn) {
-        pricingBtn.addEventListener('click', smoothScrollToPricing);
-    }
-    
-    if (pricingCircleBtn) {
-        pricingCircleBtn.addEventListener('click', smoothScrollToPricing);
-    }
-
     // Simple parallax effect for pricing section
+    const pricingSection = document.getElementById('pricing-section');
+    
     window.addEventListener('scroll', function() {
         if (pricingSection) {
             const rect = pricingSection.getBoundingClientRect();

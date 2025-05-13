@@ -428,6 +428,75 @@ header h1::after {
     transform: translateY(-1px);
 }
 
+/* Elegant Modal for Photo Viewing */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+    0% { transform: scale(0.9); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.photo-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.85);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.modal-content {
+    position: relative;
+    max-width: 85%;
+    max-height: 85%;
+    text-align: center;
+    animation: zoomIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.modal-content img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.close-modal {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.5);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
+}
+
+.photo-caption, .modal-photo-title {
+    display: none;
+}
+
 /* Modal Styles */
 .modal {
     display: none;
@@ -454,23 +523,6 @@ header h1::after {
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-}
-
-.modal-content {
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 16px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-    transform: scale(0.9);
-    transition: transform 0.3s ease;
-    animation: scaleIn 0.3s forwards;
-}
-
-@keyframes scaleIn {
-    from { transform: scale(0.9); }
-    to { transform: scale(1); }
 }
 
 .modal-header {
@@ -1269,4 +1321,201 @@ footer {
     .logout-btn {
         align-self: flex-end;
     }
+}
+
+/* Replace Photos on String with Elegant Stacking Gallery */
+.photos-on-string-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 20px;
+    text-align: center;
+    overflow: visible;
+    z-index: 1;
+}
+
+.portfolio-title {
+    font-family: 'Damion', cursive;
+    font-size: 3rem;
+    color: #444;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.portfolio-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 40px;
+    font-weight: 300;
+}
+
+/* Replace string display with stacked card gallery */
+.string-display {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-bottom: 50px;
+    overflow: visible;
+}
+
+/* Remove string line */
+.string-line, .string-line::before, .string-line::after {
+    display: none;
+}
+
+/* True card stack for swiping */
+.photo-frames {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 20px 0 60px 0;
+    height: 480px;
+    perspective: 800px;
+    transform-style: flat;
+}
+
+.photo-frame {
+    position: absolute;
+    width: 320px;
+    cursor: pointer;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    transform-origin: center;
+    transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1), 
+                opacity 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    user-select: none;
+    touch-action: none; /* Allow custom touch handling */
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+/* Stack photos directly on top of each other */
+.photo-frame:not(.swiped) {
+    z-index: 5;
+}
+
+.photo-frame.swiped {
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Remove hover transformation */
+.photo-frame:hover {
+    transform: translate(-50%, 0);
+    z-index: 5;
+}
+
+/* Update polaroid style for true stacking */
+.photo-polaroid {
+    position: relative;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    overflow: hidden;
+    height: 320px;
+    animation: none;
+    will-change: box-shadow;
+}
+
+/* Add a subtle border to help distinguish cards */
+.photo-frame:not(:first-child) .photo-polaroid {
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.photo-polaroid img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+}
+
+/* Swipe indicator */
+.swipe-hint {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(45, 51, 107, 0.5);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    pointer-events: none;
+    z-index: 100;
+    width: 100%;
+    text-align: center;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .photo-frame {
+        width: 280px;
+    }
+}
+
+@media (max-width: 480px) {
+    .photo-frame {
+        width: 240px;
+    }
+    
+    .photo-polaroid {
+        height: 270px;
+        padding: 15px;
+    }
+}
+
+/* Reset button styling */
+.reset-stack-btn {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(120, 134, 199, 0.2);
+    color: #2D336B;
+    border: 1px solid rgba(120, 134, 199, 0.3);
+    border-radius: 20px;
+    padding: 8px 15px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.reset-stack-btn:hover {
+    background-color: rgba(120, 134, 199, 0.3);
+    transform: translateX(-50%) translateY(-2px);
+}
+
+@media (max-width: 480px) {
+    .reset-stack-btn {
+        bottom: -35px;
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+}
+
+/* Update fade-in animation for smoother card appearance with preserved angle */
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        /* Start translated (y+20px), rotated (var --rotation), and scaled (0.95) */
+        transform: translate(calc(-50% + var(--x-offset, 0px)), calc(var(--y-offset, 0px) + 20px)) rotate(var(--rotation, 0deg)) scale(0.95);
+    }
+    to { 
+        opacity: 0.97; 
+        /* End at final position, same rotation, scale 1 */
+        transform: translate(calc(-50% + var(--x-offset, 0px)), var(--y-offset, 0px)) rotate(var(--rotation, 0deg)) scale(1);
+    }
+}
+
+/* Card entry animation for cards being added to the bottom or initialized */
+.card-entry {
+    animation: fadeIn 0.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 } 
