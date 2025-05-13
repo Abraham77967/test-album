@@ -1,0 +1,11 @@
+{
+  "name": "photos-website",
+  "version": "1.0.0",
+  "description": "Photo gallery website with thumbnail optimization",
+  "scripts": {
+    "generate-thumbnails": "node generate-thumbnails.js"
+  },
+  "dependencies": {
+    "sharp": "^0.32.6"
+  }
+} 
